@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, HTTPException, Query, Response
 from fastapi.responses import RedirectResponse
 
 import google_books as gb_module
-from goodreads import GoodreadsClient, map_book, map_work
+from goodreads import GoodreadsClient, _build_series, map_book, map_work
 
 logger = logging.getLogger(__name__)
 
@@ -220,6 +220,7 @@ async def get_author(author_id: int, background_tasks: BackgroundTasks, kca: str
             intermediate = {
                 **partial,
                 "Works": list(works_by_id.values()),
+                "Series": _build_series(works_by_id),
                 "TotalBookCount": total_count or partial.get("TotalBookCount", 0),
                 "Partial": True,
             }
